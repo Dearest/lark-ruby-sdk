@@ -5,10 +5,11 @@ module Lark
 
       def initialize(client)
         @client = client
-        raise RedisNotConfigException if redis.nil?
       end
 
       def token
+        return fetch_token.data[token_key] if redis.nil?
+
         update_token if expired?
         redis.hget(redis_key, token_key)
       end
